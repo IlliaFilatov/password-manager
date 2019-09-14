@@ -17,6 +17,7 @@ export default class Dashboard extends React.Component {
 
     this.state = {
       users: userList,
+      warning: '',
       redirection: ''
     }
   }
@@ -38,9 +39,29 @@ export default class Dashboard extends React.Component {
     }
   }
 
-  addPassword() {
+  addPassword(e) {
+    let node     = e.target,
+    row      = node.closest('tr'),
+    rowsId   = +row.querySelector('th').innerText - 1,
+    keys     = Object.keys(localStorage),
+    value    = localStorage.getItem(keys[rowsId]),
+    newValue;
 
+    if(value === '') {
+      newValue = window.prompt('New password for ' + keys[rowsId] + ' is: ');
+      localStorage.setItem(keys[rowsId], newValue);
+      value = localStorage.getItem(keys[rowsId]);
+      row.querySelector('.password-place').innerText = '*'.repeat(value.length);
+      this.setState({
+        warning: ''
+      })
+    } else {
+      this.setState({
+        warning: <span className="badge badge-warning">Password already exists.</span>
+      })
+    }
   }  
+
   revealPassword(e) {
     let node     = e.target,
         row      = node.closest('tr'),
@@ -50,25 +71,38 @@ export default class Dashboard extends React.Component {
 
     row.querySelector('.password-place').innerText = value;
   }
+
   editPassword(e) {
     let node     = e.target,
         row      = node.closest('tr'),
         rowsId   = +row.querySelector('th').innerText - 1,
         keys     = Object.keys(localStorage),
-        value    = localStorage.getItem(keys[rowsId]);
-
-    row.querySelector('.password-place').innerText = value;
+        newValue = window.prompt('New password for ' + keys[rowsId] + ' is: '),
+        value;
+        
+    localStorage.setItem(keys[rowsId], newValue);
+    value = localStorage.getItem(keys[rowsId]);
+    row.querySelector('.password-place').innerText = '*'.repeat(value.length);
   }
-  deletePassword() {
 
+  deletePassword(e) {
+    let node     = e.target,
+        row      = node.closest('tr'),
+        rowsId   = +row.querySelector('th').innerText - 1,
+        keys     = Object.keys(localStorage),
+        value    = localStorage.getItem(keys[rowsId]);
+        
+    localStorage.setItem(keys[rowsId], '');
+    row.querySelector('.password-place').innerText = '';
   }
 
   render() {
-    const {users, redirection} = this.state;
+    const {warning, users, redirection} = this.state;
     return (
       <>
       <>{redirection}</>
       <h1>Dashboard</h1>
+      <>{warning}</>
       <table className="table">
         <thead>
           <tr>
@@ -88,10 +122,10 @@ export default class Dashboard extends React.Component {
               </td>
               <td>
                 <div className="btn-group custom-group" role="group" aria-label="Basic example">
-                  <button type="button" className="btn btn-success">Add</button>
+                  <button type="button" className="btn btn-success" onClick={(e) => this.addPassword(e)}>Add</button>
                   <button type="button" className="btn btn-primary" onClick={(e) => this.revealPassword(e)}>Reveal</button>
-                  <button type="button" className="btn btn-warning">Edit</button>
-                  <button type="button" className="btn btn-danger">Delete</button>
+                  <button type="button" className="btn btn-warning" onClick={(e) => this.editPassword(e)}>Edit</button>
+                  <button type="button" className="btn btn-danger" onClick={(e) => this.deletePassword(e)}>Delete</button>
                 </div>
               </td>
             </tr>

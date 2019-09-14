@@ -16,7 +16,6 @@ export default class Register extends React.Component {
           passwordInputValue = formElement.querySelector('.login-input-password').value;
 
     if(loginInputValue && passwordInputValue) {
-      console.log(loginInputValue, passwordInputValue);
       localStorage.setItem(loginInputValue, passwordInputValue);
       this.setState({
         congratulations: <span className="badge badge-success">Registration is successfull!</span>
