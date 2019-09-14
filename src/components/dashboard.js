@@ -89,8 +89,7 @@ export default class Dashboard extends React.Component {
     let node     = e.target,
         row      = node.closest('tr'),
         rowsId   = +row.querySelector('th').innerText - 1,
-        keys     = Object.keys(localStorage),
-        value    = localStorage.getItem(keys[rowsId]);
+        keys     = Object.keys(localStorage);
         
     localStorage.setItem(keys[rowsId], '');
     row.querySelector('.password-place').innerText = '';
