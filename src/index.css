@@ -11,3 +11,10 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
 }
+
+.custom-group .btn {
+  padding: 4px 8px;
+  font-size: .9rem;
+}
+
+
